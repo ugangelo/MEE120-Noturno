@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MEE120-Noturno</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #263238;
+        }
+
+        header {
+            background: #1f4e79;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1450px;
+            margin: 28px auto;
+            padding: 0 20px 50px;
+        }
+
+        /* LEGENDA */
+
+        .legenda {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+        }
+
+        .cor {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .cor-academico {
+            background: #a9c99a;
+        }
+
+        .cor-avaliacao {
+            background: #80b98c;
+        }
+
+        .cor-atencao {
+            background: #f4df72;
+        }
+
+        .cor-nao-letivo {
+            background: #ef8585;
+        }
+
+        .cor-desativado {
+            background: #e1e4e8;
+        }
+
+        .seletor-turma {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin: -10px 0 25px;
+            padding: 14px 20px;
+            border: 0;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .seletor-turma strong {
+            margin-right: 4px;
+            color: #1f4e79;
+        }
+
+        .opcao-turma {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 12px;
+            border: 1px solid #b8c6d1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .opcao-turma:has(input:checked) {
+            border-color: #1f4e79;
+            background: #dce6f1;
+            color: #163a5b;
+            font-weight: 600;
+        }
+
+        .opcao-turma input {
+            accent-color: #1f4e79;
+        }
+
+
+        /* CALENDÁRIOS */
+
+        .calendarios {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .mes {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+        }
+
+        .mes h2 {
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+            background: #dce6f1;
+            color: #1f4e79;
+            font-size: 22px;
+        }
+
+        .semana,
+        .dias {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .semana div {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 10px 3px;
+            background: #eef2f5;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dia {
+            position: relative;
+            min-height: 105px;
+            padding: 7px;
+            border-right: 1px solid #e3e6e8;
+            border-bottom: 1px solid #e3e6e8;
+            background: white;
+        }
+
+        .dia:nth-child(7n) {
+            border-right: none;
+        }
+
+        .dia:not(.vazio):hover,
+        .dia:not(.vazio):focus-within {
+            z-index: 1;
+            outline: 2px solid #1f4e79;
+            outline-offset: -2px;
+        }
+
+        .numero {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 25px;
+            height: 25px;
+
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 50%;
+        }
+
+        .vazio {
+            background: #f7f8f9;
+        }
+
+        .domingo {
+            background: #f0f2f4;
+        }
+
+        .conteudo-aula,
+        .titulo-aula {
+            margin-top: 5px;
+            padding: 4px 5px;
+            border-radius: 5px;
+            background: #d7e8f7;
+            color: #163a5b;
+            cursor: pointer;
+            font-size: 10px;
+            line-height: 1.25;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .titulo-aula {
+            background: #e5f0f8;
+            font-weight: 500;
+        }
+
+        .experimento-aula {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 5px;
+            padding: 4px 5px;
+            border-radius: 5px;
+            background: #d8c4ef;
+            color: #4b2673;
+            cursor: pointer;
+            font-size: 10px;
+            line-height: 1.25;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .conteudo-aula:hover,
+        .conteudo-aula:focus-visible,
+        .titulo-aula:hover,
+        .titulo-aula:focus-visible,
+        .experimento-aula:hover,
+        .experimento-aula:focus-visible {
+            background: #bddaf1;
+            outline: 2px solid #1f4e79;
+            outline-offset: 1px;
+        }
+
+        .experimento-aula:hover,
+        .experimento-aula:focus-visible {
+            background: #c6a9e5;
+            outline-color: #684090;
+        }
+
+        .tooltip-aula {
+            position: fixed;
+            z-index: 20;
+            width: min(460px, calc(100vw - 24px));
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #173a59;
+            color: white;
+            box-shadow: 0 7px 20px rgba(0,0,0,0.25);
+            font-size: 13px;
+            line-height: 1.45;
+            pointer-events: none;
+        }
+
+        .tooltip-aula[hidden] {
+            display: none;
+        }
+
+        /* DIAS ANTERIORES AO INÍCIO */
+
+        .desativado {
+            background: #e1e4e8 !important;
+            color: #92979d !important;
+        }
+
+        .desativado .numero {
+            color: #92979d !important;
+        }
+
+
+        /* EVENTOS */
+
+        .evento {
+            margin-top: 5px;
+            padding: 4px 5px;
+            border-radius: 5px;
+
+            font-size: 10px;
+            line-height: 1.25;
+            font-weight: 600;
+        }
+
+        .evento-academico {
+            background: #a9c99a;
+        }
+
+        .evento-avaliacao {
+            background: #80b98c;
+        }
+
+        .evento-atencao {
+            background: #f4df72;
+        }
+
+        .evento-nao-letivo {
+            background: #ef8585;
+        }
+
+
+        /* DIA NÃO LETIVO */
+
+        .dia.nao-letivo {
+            background: #f8c6c6;
+        }
+
+        .dia.nao-letivo .numero {
+            background: #d94d4d;
+            color: white;
+        }
+
+
+        /* JANELA DE CONTEÚDO */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(20, 32, 43, 0.55);
+        }
+
+        .modal[hidden] {
+            display: none;
+        }
+
+        .modal-conteudo {
+            width: min(560px, 100%);
+            max-height: 85vh;
+            overflow: auto;
+            padding: 24px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+        }
+
+        .modal-topo {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .modal h3 {
+            margin: 0 0 16px;
+            color: #1f4e79;
+        }
+
+        .modal-fechar {
+            border: 0;
+            background: transparent;
+            color: #555;
+            cursor: pointer;
+            font-size: 25px;
+            line-height: 1;
+        }
+
+        .modal-texto {
+            line-height: 1.55;
+        }
+
+        .data-conteudo {
+            margin: 0 0 13px;
+            color: #5f6b73;
+            font-size: 13px;
+            text-transform: capitalize;
+        }
+
+        .referencia-aula {
+            margin: 0 0 10px;
+            font-weight: bold;
+        }
+
+        .texto-aula {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .tabela-aula {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .tabela-aula th,
+        .tabela-aula td {
+            padding: 7px 8px;
+            border: 1px solid #b8c6d1;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .tabela-aula th {
+            background: #d7e8f7;
+            color: #163a5b;
+        }
+
+        .tabela-aula th:first-child,
+        .tabela-aula td:first-child,
+        .tabela-aula th:last-child,
+        .tabela-aula td:last-child {
+            width: 1%;
+            white-space: nowrap;
+        }
+
+        .tooltip-aula .referencia-aula {
+            color: #d7e8f7;
+        }
+
+        .tooltip-aula .tabela-aula td {
+            border-color: #7690a5;
+        }
+
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 13px;
+        }
+
+
+        @media (max-width: 950px) {
+
+            .calendarios {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<header>
+
+    <h1>MEE120-Noturno</h1>
+
+    <p>
+        Cronograma da Disciplina —
+        2º Semestre de 2026
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <div class="legenda">
+
+        <div class="legenda-item">
+            <span class="cor cor-academico"></span>
+            Atividade acadêmica
+        </div>
+
+        <div class="legenda-item">
+            <span class="cor cor-avaliacao"></span>
+            Avaliação
+        </div>
+
+        <div class="legenda-item">
+            <span class="cor cor-atencao"></span>
+            Prazo
+        </div>
+
+        <div class="legenda-item">
+            <span class="cor cor-nao-letivo"></span>
+            Feriado / dia não letivo
+        </div>
+
+        <div class="legenda-item">
+            <span class="cor cor-desativado"></span>
+            Período anterior às aulas
+        </div>
+
+    </div>
+
+    <fieldset class="seletor-turma">
+        <strong>Escolha sua turma de laboratório:</strong>
+
+        <label class="opcao-turma">
+            <input type="radio" name="turma-laboratorio" value="242" checked>
+            Turma 242 — terças-feiras
+        </label>
+
+        <label class="opcao-turma">
+            <input type="radio" name="turma-laboratorio" value="142">
+            Turma 142 — sábados
+        </label>
+    </fieldset>
+
+
+    <div
+        class="calendarios"
+        id="calendarios">
+    </div>
+
+
+    <footer>
+        MEE120-Noturno |
+        2º semestre de 2026
+    </footer>
+
+</div>
+
+
+<div
+    class="modal"
+    id="modal-conteudo"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-titulo"
+    hidden>
+
+    <div class="modal-conteudo">
+        <div class="modal-topo">
+            <h3 id="modal-titulo"></h3>
+            <button
+                class="modal-fechar"
+                id="modal-fechar"
+                type="button"
+                aria-label="Fechar">
+                &times;
+            </button>
+        </div>
+
+        <div
+            class="modal-texto"
+            id="modal-texto">
+        </div>
+    </div>
+
+</div>
+
+
+<div
+    class="tooltip-aula"
+    id="tooltip-aula"
+    role="tooltip"
+    hidden>
+</div>
+
+
+<script src="conteudos.js"></script>
+
+<script>
+
+/* =========================================================
+   CONFIGURAÇÃO
+   ========================================================= */
+
+const ano = 2026;
+
+const meses = [
+    { numero: 7, nome: "Agosto" },
+    { numero: 8, nome: "Setembro" },
+    { numero: 9, nome: "Outubro" },
+    { numero: 10, nome: "Novembro" },
+    { numero: 11, nome: "Dezembro" }
+];
+
+const conteudos = window.conteudosAulas || {};
+
+let turmaLaboratorio = "242";
+
+const conteudosTurma142 = {
+    "2026-08-15": "2026-08-11",
+    "2026-08-22": "2026-08-18",
+    "2026-08-29": "2026-08-25",
+    "2026-09-05": "2026-09-01",
+    "2026-09-12": "2026-09-08",
+    "2026-10-10": "2026-10-06",
+    "2026-10-17": "2026-10-20",
+    "2026-10-24": "2026-10-27",
+    "2026-10-31": "2026-11-03",
+    "2026-11-07": "2026-11-10",
+    "2026-11-14": "2026-11-17"
+};
+
+
+/* =========================================================
+   EVENTOS RELEVANTES PARA A DISCIPLINA
+   ========================================================= */
+
+const eventos = [
+
+    /* AGOSTO */
+
+    {
+        inicio: "2026-08-10",
+        fim: "2026-08-10",
+        texto: "Início do período letivo",
+        tipo: "academico"
+    },
+
+    {
+        inicio: "2026-08-20",
+        fim: "2026-08-20",
+        texto: "Aniversário de São Bernardo do Campo",
+        tipo: "nao-letivo"
+    },
+
+
+    /* SETEMBRO */
+
+    {
+        inicio: "2026-09-07",
+        fim: "2026-09-07",
+        texto: "Independência do Brasil",
+        tipo: "nao-letivo"
+    },
+
+    {
+        inicio: "2026-09-19",
+        fim: "2026-09-19",
+        texto: "FEI Portas Abertas — dia não letivo",
+        tipo: "nao-letivo"
+    },
+
+    {
+        inicio: "2026-09-22",
+        fim: "2026-10-03",
+        texto: "P1",
+        tipo: "avaliacao"
+    },
+
+
+    /* OUTUBRO */
+
+    {
+        inicio: "2026-10-12",
+        fim: "2026-10-12",
+        texto: "Nossa Senhora da Aparecida",
+        tipo: "nao-letivo"
+    },
+
+    {
+        inicio: "2026-10-13",
+        fim: "2026-10-13",
+        texto: "Dia do Professor — dia não letivo",
+        tipo: "nao-letivo"
+    },
+
+    /* NOVEMBRO */
+
+    {
+        inicio: "2026-11-02",
+        fim: "2026-11-02",
+        texto: "Finados",
+        tipo: "nao-letivo"
+    },
+
+    {
+        inicio: "2026-11-11",
+        fim: "2026-11-11",
+        texto: "INOVAFEI",
+        tipo: "academico"
+    },
+
+    {
+        inicio: "2026-11-15",
+        fim: "2026-11-15",
+        texto: "Proclamação da República",
+        tipo: "nao-letivo"
+    },
+
+    {
+        inicio: "2026-11-19",
+        fim: "2026-11-19",
+        texto: "P2",
+        tipo: "avaliacao"
+    },
+
+    {
+        inicio: "2026-11-21",
+        fim: "2026-12-01",
+        texto: "P2",
+        tipo: "avaliacao"
+    },
+
+    {
+        inicio: "2026-11-20",
+        fim: "2026-11-20",
+        texto: "Consciência Negra",
+        tipo: "nao-letivo"
+    },
+
+
+    /* DEZEMBRO */
+
+    {
+        inicio: "2026-12-07",
+        fim: "2026-12-15",
+        texto: "P3",
+        tipo: "avaliacao"
+    },
+
+    {
+        inicio: "2026-12-18",
+        fim: "2026-12-18",
+        texto: "Término do período letivo",
+        tipo: "nao-letivo"
+    },
+
+    {
+        inicio: "2026-12-25",
+        fim: "2026-12-25",
+        texto: "Natal",
+        tipo: "nao-letivo"
+    }
+
+];
+
+
+/* =========================================================
+   FUNÇÕES
+   ========================================================= */
+
+function formatarData(ano, mes, dia) {
+
+    return (
+        ano +
+        "-" +
+        String(mes + 1).padStart(2, "0") +
+        "-" +
+        String(dia).padStart(2, "0")
+    );
+
+}
+
+
+function eventosDoDia(data) {
+
+    return eventos.filter(evento =>
+        data >= evento.inicio &&
+        data <= evento.fim
+    );
+
+}
+
+
+function tipoAulaDoDia(dataAtual, dataTexto) {
+
+    const dentroDoPeriodoLetivo =
+        dataTexto >= "2026-08-10" &&
+        dataTexto <= "2026-12-18";
+
+    if (!dentroDoPeriodoLetivo) {
+        return null;
+    }
+
+    const laboratorioTurma242 =
+        turmaLaboratorio === "242" &&
+        dataAtual.getDay() === 2;
+
+    const laboratorioTurma142 =
+        turmaLaboratorio === "142" &&
+        Boolean(conteudosTurma142[dataTexto]);
+
+    if (laboratorioTurma242 || laboratorioTurma142) {
+        return "Laboratório — Turma " + turmaLaboratorio;
+    }
+
+    if (dataAtual.getDay() === 5) {
+        return "Teoria";
+    }
+
+    return null;
+
+}
+
+
+function dadosDaAula(dataAtual, dataTexto, tipoAula) {
+
+    if (
+        dataAtual.getDay() === 5 &&
+        tipoAula === "Teoria"
+    ) {
+        const quintaDaSemana = new Date(dataAtual);
+        quintaDaSemana.setDate(quintaDaSemana.getDate() - 1);
+
+        return conteudos[
+            formatarData(
+                quintaDaSemana.getFullYear(),
+                quintaDaSemana.getMonth(),
+                quintaDaSemana.getDate()
+            )
+        ];
+    }
+
+    if (
+        turmaLaboratorio === "142" &&
+        dataAtual.getDay() === 6 &&
+        tipoAula?.startsWith("Laboratório")
+    ) {
+        return conteudos[conteudosTurma142[dataTexto]];
+    }
+
+    return conteudos[dataTexto];
+
+}
+
+
+function abrirConteudo(data, conteudoSelecionado) {
+
+    const modal =
+        document.getElementById("modal-conteudo");
+
+    const titulo =
+        document.getElementById("modal-titulo");
+
+    const texto =
+        document.getElementById("modal-texto");
+
+    const conteudo =
+        conteudoSelecionado || conteudos[data];
+
+    const dataFormatada =
+        new Intl.DateTimeFormat(
+            "pt-BR",
+            {
+                timeZone: "UTC",
+                dateStyle: "long"
+            }
+        ).format(new Date(data + "T12:00:00Z"));
+
+    titulo.textContent =
+        conteudo?.nome ||
+        (
+            Array.isArray(conteudo?.titulo)
+                ? conteudo.titulo.join(" e ")
+                : conteudo?.titulo
+        ) ||
+        "Conteúdo da aula";
+
+    texto.replaceChildren();
+
+    const dataElemento =
+        document.createElement("p");
+
+    dataElemento.className = "data-conteudo";
+    dataElemento.textContent = dataFormatada;
+    texto.appendChild(dataElemento);
+
+    preencherDetalhes(
+        texto,
+        conteudo || {
+            conteudo:
+                "Nenhum conteúdo cadastrado para este dia."
+        }
+    );
+
+    modal.hidden = false;
+
+    document.getElementById("modal-fechar").focus();
+
+}
+
+
+function preencherDetalhes(elemento, conteudo) {
+
+    if (conteudo.referencia) {
+
+        const referencia =
+            document.createElement("p");
+
+        referencia.className = "referencia-aula";
+        referencia.textContent = conteudo.referencia;
+        elemento.appendChild(referencia);
+
+    }
+
+    if (
+        Array.isArray(conteudo.itens) &&
+        conteudo.itens.length > 0
+    ) {
+
+        const tabela =
+            document.createElement("table");
+
+        tabela.className = "tabela-aula";
+
+        const cabecalho = tabela.createTHead();
+        const linhaCabecalho = cabecalho.insertRow();
+
+        ["Cap.", "Conteúdo", "Pág."].forEach(rotulo => {
+            const celula = document.createElement("th");
+            celula.scope = "col";
+            celula.textContent = rotulo;
+            linhaCabecalho.appendChild(celula);
+        });
+
+        const corpo = tabela.createTBody();
+
+        conteudo.itens.forEach(item => {
+
+            const linha = corpo.insertRow();
+
+            [
+                item.capitulo,
+                item.conteudo,
+                item.pagina
+            ].forEach(valor => {
+                const celula = linha.insertCell();
+                celula.textContent = valor ?? "";
+            });
+
+        });
+
+        elemento.appendChild(tabela);
+
+        return;
+
+    }
+
+    const texto =
+        document.createElement("p");
+
+    texto.className = "texto-aula";
+    texto.textContent =
+        conteudo.conteudo ||
+        "Nenhum conteúdo detalhado cadastrado.";
+
+    elemento.appendChild(texto);
+
+}
+
+
+function mostrarTooltip(elemento, conteudo) {
+
+    const tooltip =
+        document.getElementById("tooltip-aula");
+
+    tooltip.replaceChildren();
+    preencherDetalhes(tooltip, conteudo);
+    tooltip.hidden = false;
+
+    const margem = 12;
+    const espaco = 8;
+    const posicao = elemento.getBoundingClientRect();
+    const largura = tooltip.offsetWidth;
+    const altura = tooltip.offsetHeight;
+
+    let esquerda =
+        posicao.left + (posicao.width - largura) / 2;
+
+    esquerda = Math.max(
+        margem,
+        Math.min(
+            esquerda,
+            window.innerWidth - largura - margem
+        )
+    );
+
+    let topo = posicao.bottom + espaco;
+
+    if (topo + altura > window.innerHeight - margem) {
+        topo = posicao.top - altura - espaco;
+    }
+
+    tooltip.style.left = esquerda + "px";
+    tooltip.style.top = Math.max(margem, topo) + "px";
+
+}
+
+
+function esconderTooltip() {
+
+    document.getElementById("tooltip-aula").hidden = true;
+
+}
+
+
+function fecharConteudo() {
+
+    document.getElementById("modal-conteudo").hidden = true;
+
+}
+
+
+function criarCalendario(mes, nomeMes) {
+
+    const calendario =
+        document.createElement("div");
+
+    calendario.className = "mes";
+
+
+    const titulo =
+        document.createElement("h2");
+
+    titulo.textContent =
+        nomeMes + " " + ano;
+
+    calendario.appendChild(titulo);
+
+
+    /* CABEÇALHO DA SEMANA */
+
+    const semana =
+        document.createElement("div");
+
+    semana.className = "semana";
+
+    [
+        "DOM",
+        "SEG",
+        "TER",
+        "QUA",
+        "QUI",
+        "SEX",
+        "SÁB"
+    ].forEach(nome => {
+
+        const item =
+            document.createElement("div");
+
+        item.textContent = nome;
+
+        semana.appendChild(item);
+
+    });
+
+    calendario.appendChild(semana);
+
+
+    /* ÁREA DOS DIAS */
+
+    const dias =
+        document.createElement("div");
+
+    dias.className = "dias";
+
+
+    const primeiroDia =
+        new Date(
+            ano,
+            mes,
+            1
+        ).getDay();
+
+    const quantidadeDias =
+        new Date(
+            ano,
+            mes + 1,
+            0
+        ).getDate();
+
+
+    /* ESPAÇOS VAZIOS ANTES DO DIA 1 */
+
+    for (
+        let i = 0;
+        i < primeiroDia;
+        i++
+    ) {
+
+        const vazio =
+            document.createElement("div");
+
+        vazio.className =
+            "dia vazio";
+
+        dias.appendChild(vazio);
+
+    }
+
+
+    /* DIAS DO MÊS */
+
+    for (
+        let dia = 1;
+        dia <= quantidadeDias;
+        dia++
+    ) {
+
+        const dataAtual =
+            new Date(
+                ano,
+                mes,
+                dia
+            );
+
+        const dataTexto =
+            formatarData(
+                ano,
+                mes,
+                dia
+            );
+
+
+        const elementoDia =
+            document.createElement("div");
+
+        elementoDia.className = "dia";
+
+        elementoDia.dataset.data = dataTexto;
+
+
+        /* 1 A 8 DE AGOSTO EM CINZA */
+
+        if (
+            dataTexto >= "2026-08-01" &&
+            dataTexto <= "2026-08-08"
+        ) {
+
+            elementoDia.classList.add(
+                "desativado"
+            );
+
+        }
+
+
+        /* DOMINGOS */
+
+        if (
+            dataAtual.getDay() === 0 &&
+            !elementoDia.classList.contains("desativado")
+        ) {
+
+            elementoDia.classList.add(
+                "domingo"
+            );
+
+        }
+
+
+        /* NÚMERO DO DIA */
+
+        const numero =
+            document.createElement("span");
+
+        numero.className = "numero";
+
+        numero.textContent = dia;
+
+        elementoDia.appendChild(numero);
+
+
+        /* EVENTOS DO DIA */
+
+        const eventosHoje =
+            dataAtual.getDay() === 0
+                ? []
+                : eventosDoDia(dataTexto);
+
+
+        eventosHoje.forEach(evento => {
+
+            const bloco =
+                document.createElement("div");
+
+            bloco.className =
+                "evento evento-" +
+                evento.tipo;
+
+            bloco.textContent =
+                evento.texto;
+
+            elementoDia.appendChild(bloco);
+
+
+            if (
+                evento.tipo ===
+                "nao-letivo"
+            ) {
+
+                elementoDia.classList.add(
+                    "nao-letivo"
+                );
+
+            }
+
+        });
+
+
+        /* CONTEÚDO DA AULA */
+
+        const diaSemAula =
+            eventosHoje.some(evento =>
+                evento.tipo === "nao-letivo" ||
+                evento.tipo === "avaliacao"
+            );
+
+        const tipoAula =
+            diaSemAula
+                ? null
+                : tipoAulaDoDia(
+                    dataAtual,
+                    dataTexto
+                );
+
+        const dadosDoDia =
+            dadosDaAula(
+                dataAtual,
+                dataTexto,
+                tipoAula
+            );
+
+        const conteudoDoDia =
+            tipoAula
+                ? {
+                    ...dadosDoDia,
+                    nome:
+                        dadosDoDia?.nome ||
+                        tipoAula,
+                    conteudo:
+                        dadosDoDia?.conteudo ||
+                        (
+                            dadosDoDia?.itens?.length
+                                ? ""
+                                : tipoAula +
+                                  ". Conteúdo ainda não cadastrado."
+                        )
+                }
+                : null;
+
+        if (conteudoDoDia) {
+
+            const blocoConteudo =
+                document.createElement("div");
+
+            blocoConteudo.className =
+                "conteudo-aula";
+
+            blocoConteudo.textContent =
+                conteudoDoDia.nome ||
+                conteudoDoDia.titulo ||
+                "Conteúdo da aula";
+
+            blocoConteudo.tabIndex = 0;
+            blocoConteudo.setAttribute(
+                "role",
+                "button"
+            );
+            blocoConteudo.setAttribute(
+                "aria-describedby",
+                "tooltip-aula"
+            );
+
+            blocoConteudo.addEventListener(
+                "focus",
+                () => mostrarTooltip(
+                    elementoDia,
+                    conteudoDoDia
+                )
+            );
+
+            blocoConteudo.addEventListener(
+                "blur",
+                esconderTooltip
+            );
+
+            blocoConteudo.addEventListener(
+                "click",
+                evento => {
+                    evento.stopPropagation();
+                    esconderTooltip();
+                    abrirConteudo(dataTexto, conteudoDoDia);
+                }
+            );
+
+            blocoConteudo.addEventListener(
+                "keydown",
+                evento => {
+                    if (
+                        evento.key === "Enter" ||
+                        evento.key === " "
+                    ) {
+                        evento.preventDefault();
+                        esconderTooltip();
+                        abrirConteudo(dataTexto, conteudoDoDia);
+                    }
+                }
+            );
+
+            elementoDia.appendChild(
+                blocoConteudo
+            );
+
+            const titulosAula =
+                Array.isArray(conteudoDoDia.titulo)
+                    ? conteudoDoDia.titulo
+                    : [conteudoDoDia.titulo];
+
+            titulosAula
+                .filter(Boolean)
+                .forEach(titulo => {
+
+                const tituloAula =
+                    document.createElement("div");
+
+                tituloAula.className = "titulo-aula";
+                tituloAula.textContent =
+                    titulo;
+                tituloAula.tabIndex = 0;
+                tituloAula.setAttribute(
+                    "role",
+                    "button"
+                );
+
+                tituloAula.addEventListener(
+                    "click",
+                    evento => {
+                        evento.stopPropagation();
+                        esconderTooltip();
+                        abrirConteudo(dataTexto, conteudoDoDia);
+                    }
+                );
+
+                tituloAula.addEventListener(
+                    "keydown",
+                    evento => {
+                        if (
+                            evento.key === "Enter" ||
+                            evento.key === " "
+                        ) {
+                            evento.preventDefault();
+                            esconderTooltip();
+                            abrirConteudo(dataTexto, conteudoDoDia);
+                        }
+                    }
+                );
+
+                elementoDia.appendChild(
+                    tituloAula
+                );
+
+            });
+
+            const possuiExperimento =
+                conteudoDoDia.itens?.some(item =>
+                    item.capitulo === "[EXP]" ||
+                    item.pagina === "[EXP]"
+                );
+
+            if (possuiExperimento) {
+
+                const experimento =
+                    document.createElement("div");
+
+                experimento.className =
+                    "experimento-aula";
+                experimento.tabIndex = 0;
+                experimento.setAttribute(
+                    "role",
+                    "button"
+                );
+                experimento.setAttribute(
+                    "aria-label",
+                    "Ver experimento"
+                );
+
+                const simbolo =
+                    document.createElement("span");
+
+                simbolo.textContent = "🧪";
+                simbolo.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                const textoExperimento =
+                    document.createElement("span");
+
+                textoExperimento.textContent =
+                    "Experimento";
+
+                experimento.append(
+                    simbolo,
+                    textoExperimento
+                );
+
+                const abrirExperimento = evento => {
+                    evento.stopPropagation();
+                    esconderTooltip();
+                    abrirConteudo(dataTexto, conteudoDoDia);
+                };
+
+                experimento.addEventListener(
+                    "click",
+                    abrirExperimento
+                );
+
+                experimento.addEventListener(
+                    "keydown",
+                    evento => {
+                        if (
+                            evento.key === "Enter" ||
+                            evento.key === " "
+                        ) {
+                            evento.preventDefault();
+                            abrirExperimento(evento);
+                        }
+                    }
+                );
+
+                elementoDia.appendChild(
+                    experimento
+                );
+
+            }
+
+            elementoDia.addEventListener(
+                "mouseenter",
+                () => mostrarTooltip(
+                    elementoDia,
+                    conteudoDoDia
+                )
+            );
+
+            elementoDia.addEventListener(
+                "mouseleave",
+                esconderTooltip
+            );
+
+        }
+
+
+        dias.appendChild(
+            elementoDia
+        );
+
+    }
+
+
+    calendario.appendChild(dias);
+
+    return calendario;
+
+}
+
+
+/* =========================================================
+   MONTAGEM DO CALENDÁRIO
+   ========================================================= */
+
+function montarCalendarios() {
+
+    const area =
+        document.getElementById(
+            "calendarios"
+        );
+
+    area.replaceChildren();
+
+    meses.forEach(mes => {
+
+        area.appendChild(
+            criarCalendario(
+                mes.numero,
+                mes.nome
+            )
+        );
+
+    });
+
+}
+
+
+document.querySelectorAll(
+    'input[name="turma-laboratorio"]'
+).forEach(opcao => {
+    opcao.addEventListener("change", evento => {
+        turmaLaboratorio = evento.target.value;
+        esconderTooltip();
+        montarCalendarios();
+    });
+});
+
+
+document.getElementById("modal-fechar").addEventListener(
+    "click",
+    fecharConteudo
+);
+
+document.getElementById("modal-conteudo").addEventListener(
+    "click",
+    evento => {
+        if (evento.target.id === "modal-conteudo") {
+            fecharConteudo();
+        }
+    }
+);
+
+document.addEventListener(
+    "keydown",
+    evento => {
+        if (evento.key === "Escape") {
+            fecharConteudo();
+        }
+    }
+);
+
+montarCalendarios();
+
+</script>
+
+</body>
+
+</html>
