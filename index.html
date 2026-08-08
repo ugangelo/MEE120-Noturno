@@ -127,7 +127,75 @@
         }
 
         .opcao-turma input {
-            accent-color: #1f4e79;
+            appearance: none;
+            -webkit-appearance: none;
+            display: grid;
+            flex: 0 0 auto;
+            place-content: center;
+            width: 21px;
+            height: 21px;
+            margin: 0;
+            border: 2px solid #6d8497;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .opcao-turma input::before {
+            content: "✓";
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            line-height: 1;
+            transform: scale(0);
+            transition: transform 120ms ease;
+        }
+
+        .opcao-turma input:checked {
+            border-color: #1f4e79;
+            background: #1f4e79;
+        }
+
+        .opcao-turma input:checked::before {
+            transform: scale(1);
+        }
+
+        .opcao-turma input:focus-visible {
+            outline: 3px solid rgba(31, 78, 121, 0.3);
+            outline-offset: 3px;
+        }
+
+        .acoes-cronograma {
+            display: flex;
+            justify-content: flex-end;
+            margin: -12px 0 25px;
+        }
+
+        .link-impressao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 10px 15px;
+            border: 1px solid #1f4e79;
+            border-radius: 8px;
+            background: white;
+            color: #1f4e79;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .link-impressao:hover,
+        .link-impressao:focus-visible {
+            background: #1f4e79;
+            color: white;
+            outline: none;
+        }
+
+        .link-impressao:focus-visible {
+            box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.3);
         }
 
 
@@ -456,6 +524,57 @@
 
         }
 
+        @media (max-width: 600px) {
+
+            .container {
+                margin-top: 18px;
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+
+            .seletor-turma {
+                display: grid;
+                grid-template-columns: 1fr;
+                width: 100%;
+                margin-top: 0;
+                padding: 14px;
+                gap: 10px;
+            }
+
+            .seletor-turma strong {
+                display: block;
+                margin: 0 0 2px;
+                line-height: 1.35;
+            }
+
+            .opcao-turma {
+                width: 100%;
+                min-height: 52px;
+                padding: 12px 14px;
+                font-size: 15px;
+                line-height: 1.3;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(31, 78, 121, 0.15);
+            }
+
+            .opcao-turma input {
+                flex: 0 0 auto;
+                width: 24px;
+                height: 24px;
+                margin: 0;
+            }
+
+            .acoes-cronograma,
+            .link-impressao {
+                width: 100%;
+            }
+
+            .acoes-cronograma {
+                margin-top: -12px;
+            }
+
+        }
+
     </style>
 </head>
 
@@ -518,6 +637,17 @@
             Turma 142 — sábados
         </label>
     </fieldset>
+
+    <div class="acoes-cronograma">
+        <a
+            class="link-impressao"
+            href="output/pdf/MEE120-Noturno-cronograma.pdf"
+            target="_blank"
+            rel="noopener">
+            <span aria-hidden="true">↓</span>
+            Versão impressa do cronograma (PDF)
+        </a>
+    </div>
 
 
     <div
